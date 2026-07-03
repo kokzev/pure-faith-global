@@ -1,0 +1,46 @@
+datasource db {
+  provider = "postgresql"
+  
+}
+
+generator client {
+  provider = "prisma-client"
+  output   = "../lib/generated/prisma"
+}
+
+model Sermon {
+  id          String   @id @default(cuid())
+  title       String
+  slug        String   @unique
+  content     String
+  speaker     String?
+  imageUrl    String?
+  published   Boolean  @default(true)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+}
+
+model PrayerRequest {
+  id          String   @id @default(cuid())
+  name        String?
+  request     String
+  isAnswered  Boolean  @default(false)
+  createdAt   DateTime @default(now())
+}
+
+model Testimonial {
+  id          String   @id @default(cuid())
+  name        String
+  message     String
+  role        String?
+  imageUrl    String?
+  createdAt   DateTime @default(now())
+}
+
+model Media {
+  id          String   @id @default(cuid())
+  title       String
+  url         String
+  type        String   // image | video | audio
+  createdAt   DateTime @default(now())
+}
