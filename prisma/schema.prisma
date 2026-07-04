@@ -1,6 +1,5 @@
 datasource db {
   provider = "postgresql"
-  
 }
 
 generator client {
@@ -41,6 +40,6 @@ model Media {
   id          String   @id @default(cuid())
   title       String
   url         String
-  type        String   // image | video | audio
+  type        String
   createdAt   DateTime @default(now())
 }

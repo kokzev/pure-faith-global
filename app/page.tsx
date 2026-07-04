@@ -133,7 +133,7 @@ export default function Home() {
               >
                 Pure Faith Global
               </div>
-              <div className="text-[#1B3A5C]/70 text-sm">William Zion Ministry</div>
+              <div className="text-[#1B3A5C]/70 text-sm">William Zion</div>
             </div>
           </div>
 
@@ -179,7 +179,7 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto px-8 text-center relative z-10">
           <div className="mb-8 inline-flex items-center gap-4 px-8 py-3 border border-[#D4AF37]/30 rounded-full text-sm tracking-[4px] text-[#D4AF37] font-semibold">
-            ✝️ A MINISTRY ANOINTED BY THE HOLY SPIRIT
+            ✝️  MINISTERING BY THE HOLY SPIRIT
           </div>
 
           <h1 className="font-serif font-black text-[110px] md:text-[150px] leading-[0.9] tracking-[-6px] mb-8">
@@ -190,7 +190,7 @@ export default function Home() {
           </h1>
 
           <p className="text-2xl md:text-3xl max-w-4xl mx-auto text-white/90 mb-16 font-medium">
-            William Zion brings the living Word of God with divine fire, beauty, and transforming power to the nations.
+            Bringiing the living Word of God with divine fire, beauty, and transforming power to the nations.
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
@@ -285,8 +285,18 @@ export default function Home() {
         </div>
       </section>
 
+      {/* Dynamic Latest Media */}
+      <section className="py-20 bg-white">
+        <div className="max-w-7xl mx-auto px-8">
+          <h2 className="font-serif text-5xl text-center text-[#0F2540] mb-12">Latest Media</h2>
+          <div className="grid md:grid-cols-3 gap-8">
+            {/* Fetched media will appear here */}
+          </div>
+        </div>
+      </section>
+
       <footer className="bg-[#0F2540] py-20 text-white/70 text-center text-sm tracking-wide">
-        © Pure Faith Global • William Zion Ministry • All Glory to God
+        © Pure Faith Global • William Zion • All Glory to God
       </footer>
     </div>
   );

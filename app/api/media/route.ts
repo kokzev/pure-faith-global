@@ -1,42 +1,39 @@
-﻿import { prisma } from "@/lib/prisma";
-import { z } from "zod";
+﻿@'
+  // app/api/media/route.ts
+  import { list } from '@vercel/blob';
+import { NextResponse } from 'next/server';
+import { prisma } from '@/lib/prisma';
 
-const mediaSchema = z.object({
-  title: z.string().trim().min(1).max(200),
-  url: z.string().url(),
-  type: z.enum(["image", "video", "audio", "article"]),
-});
-
-// LIST media (public)
 export async function GET() {
   try {
-    const media = await prisma.media.findMany({
-      orderBy: { createdAt: "desc" },
+    const { blobs } = await list({
+      token: process.env.BLOB_UP_READ_WRITE_TOKEN,
+      prefix: '',
     });
-    return Response.json(media);
-  } catch (error) {
-    console.error("MEDIA GET ERROR:", error);
-    return Response.json({ error: "Failed to fetch media" }, { status: 500 });
+    return NextResponse.json({ blobs });
+  } catch (error: any) {
+    console.error('List Blobs Error:', error);
+    return NextResponse.json({ error: 'Failed to fetch media' }, { status: 500 });
   }
 }
 
-// CREATE media record (lock behind admin auth before production)
-export async function POST(req: Request) {
+export async function POST(request: Request) {
   try {
-    const body = await req.json();
-    const parsed = mediaSchema.safeParse(body);
+    const body = await request.json();
+    const { title, type, url } = body;
 
-    if (!parsed.success) {
-      return Response.json(
-        { error: parsed.error.issues[0]?.message ?? "Invalid submission." },
-        { status: 400 }
-      );
+    if (!title || !type || !url) {
+      return NextResponse.json({ error: 'Missing title, type, or url' }, { status: 400 });
     }
 
-    const media = await prisma.media.create({ data: parsed.data });
-    return Response.json(media);
-  } catch (error) {
-    console.error("MEDIA POST ERROR:", error);
-    return Response.json({ error: "Failed to create media record" }, { status: 500 });
+    const media = await prisma.media.create({
+      data: { title, type, url },
+    });
+
+    return NextResponse.json({ success: true, media });
+  } catch (error: any) {
+    console.error('Media Create Error:', error);
+    return NextResponse.json({ error: 'Failed to save media record' }, { status: 500 });
   }
 }
+'@ | Set-Content app\api\media\route.ts

@@ -1,38 +1,38 @@
-﻿import { put } from "@vercel/blob";
+// app/api/upload/route.ts
+import { put } from '@vercel/blob';
+import { NextRequest, NextResponse } from 'next/server';
 
-export async function POST(req: Request): Promise<Response> {
+export async function POST(request: NextRequest) {
   try {
-    const form = await req.formData();
-    const file = form.get("file") as File | null;
+    const formData = await request.formData();
+    const file = formData.get('file') as File | null;
 
     if (!file) {
-      return Response.json({ error: "No file provided." }, { status: 400 });
-    }
-
-    const allowedTypes = [
-      "audio/mpeg", "audio/wav", "audio/mp4",
-      "video/mp4", "video/webm", "video/quicktime",
-      "image/jpeg", "image/png", "image/webp",
-      "application/pdf", "text/plain",
-    ];
-
-    if (!allowedTypes.includes(file.type)) {
-      return Response.json({ error: `Unsupported file type: ${file.type}` }, { status: 400 });
-    }
-
-    const MAX_SIZE = 200 * 1024 * 1024; // 200MB
-    if (file.size > MAX_SIZE) {
-      return Response.json({ error: "File exceeds 200MB limit." }, { status: 400 });
+      return NextResponse.json({ error: 'No file provided' }, { status: 400 });
     }
 
     const blob = await put(file.name, file, {
-      access: "public",
+      access: 'public',
       addRandomSuffix: true,
+      token: process.env.BLOB_UP_READ_WRITE_TOKEN,   // ? Updated
     });
 
-    return Response.json({ url: blob.url, contentType: file.type });
-  } catch (error) {
-    console.error("UPLOAD ERROR:", error);
-    return Response.json({ error: "Upload failed. Please try again." }, { status: 500 });
+    return NextResponse.json({
+      url: blob.url,
+      pathname: blob.pathname,
+      contentType: blob.contentType,
+      size: file.size,
+    });
+
+  } catch (error: any) {
+    console.error('Vercel Blob Upload Error:', error.message);
+
+    if (error.message?.includes('private store') || error.message?.includes('Cannot use public access')) {
+      return NextResponse.json({
+        error: 'Blob store configuration mismatch. Please verify BLOB_UP_* variables and store access policy.'
+      }, { status: 400 });
+    }
+
+    return NextResponse.json({ error: 'Upload failed' }, { status: 500 });
   }
 }
