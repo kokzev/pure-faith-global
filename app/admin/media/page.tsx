@@ -1,7 +1,7 @@
 "use client";
 import { useState } from "react";
 
-function detectType(file) {
+function detectType(file: File) {
   const mime = file.type;
   const ext = file.name.split(".").pop()?.toLowerCase() || "";
   if (mime.startsWith("image/")) return "image";
@@ -18,7 +18,7 @@ export default function MediaUpload() {
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
 
-  const handleUpload = async (e) => {
+  const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!file) {
       setStatus("Please select a file");
