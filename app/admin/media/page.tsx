@@ -14,7 +14,7 @@ function detectType(file: File) {
 
 export default function MediaUpload() {
   const [title, setTitle] = useState("");
-  const [file, setFile] = useState(null);
+  const [file, setFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
   const [preview, setPreview] = useState("");
 
