@@ -1,88 +1,150 @@
 "use client";
 import { useState } from "react";
+import dynamic from "next/dynamic";
+import "react-quill-new/dist/quill.snow.css";
 
-function detectType(file: File) {
-  const mime = file.type;
-  const ext = file.name.split(".").pop()?.toLowerCase() || "";
-  if (mime.startsWith("image/")) return "image";
-  if (mime.startsWith("video/")) return "video";
-  if (mime.startsWith("audio/")) return "audio";
-  const articleExts = ["docx", "doc", "pdf", "txt", "md", "pptx", "xlsx"];
-  if (articleExts.includes(ext)) return "article";
-  return "article";
-}
+const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
 
 export default function MediaUpload() {
   const [title, setTitle] = useState("");
+  const [type, setType] = useState("article");
+  const [content, setContent] = useState("");
+  const [embedUrl, setEmbedUrl] = useState("");
   const [file, setFile] = useState<File | null>(null);
+  const [thumbnailFile, setThumbnailFile] = useState<File | null>(null);
   const [status, setStatus] = useState("");
-  const [preview, setPreview] = useState("");
+
+  const uploadFile = async (f: File) => {
+    const formData = new FormData();
+    formData.append("file", f);
+    const res = await fetch("/api/upload", { method: "POST", body: formData });
+    const data = await res.json();
+    if (!res.ok || !data.url) throw new Error(data.error || "File upload failed");
+    return data.url as string;
+  };
 
   const handleUpload = async (e: React.FormEvent) => {
     e.preventDefault();
-    if (!file) {
-      setStatus("Please select a file");
+    if (!title) {
+      setStatus("Please enter a title");
       return;
     }
-    const detectedType = detectType(file);
-    const formData = new FormData();
-    formData.append("file", file);
-    formData.append("title", title || file.name);
-    formData.append("type", detectedType);
     setStatus("Uploading...");
     try {
-      const uploadRes = await fetch("/api/upload", { method: "POST", body: formData });
-      const uploadData = await uploadRes.json();
-      if (!uploadRes.ok || !uploadData.url) {
-        setStatus(uploadData.error || "Upload failed");
-        return;
-      }
+      let url: string | undefined;
+      let thumbnailUrl: string | undefined;
+
+      if (file) url = await uploadFile(file);
+      if (thumbnailFile) thumbnailUrl = await uploadFile(thumbnailFile);
+
       const saveRes = await fetch("/api/media", {
         method: "POST",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ title: title || file.name, type: detectedType, url: uploadData.url }),
+        body: JSON.stringify({
+          title,
+          type,
+          url: url || null,
+          content: type === "article" ? content : null,
+          thumbnailUrl: thumbnailUrl || null,
+          embedUrl: embedUrl || null,
+        }),
       });
+
       if (!saveRes.ok) {
-        setStatus("Uploaded but failed to save record.");
+        setStatus("Failed to save record.");
         return;
       }
-      setPreview(uploadData.url);
-      setStatus("Upload successful! Detected type: " + detectedType);
-    } catch (err) {
-      setStatus("Upload failed. Please try again.");
+
+      setStatus("Upload successful!");
+      setTitle("");
+      setContent("");
+      setEmbedUrl("");
+      setFile(null);
+      setThumbnailFile(null);
+    } catch (err: any) {
+      setStatus(err.message || "Upload failed. Please try again.");
     }
   };
 
   return (
-    <div className="max-w-lg mx-auto p-12 bg-white rounded-3xl shadow-2xl mt-12 border border-gray-100">
-      <h1 className="text-4xl font-serif text-center mb-12 text-[#0F2540]">Upload Media</h1>
+    <div className="max-w-2xl mx-auto p-12 bg-white rounded-3xl shadow-2xl mt-12 border border-gray-100">
+      <h1 className="text-4xl font-serif text-center mb-12 text-[#0F2540]">Upload media</h1>
       <form onSubmit={handleUpload} className="space-y-8">
         <div>
           <label className="block text-sm font-medium mb-2 text-[#0F2540]">Title</label>
-          <input type="text" value={title} onChange={(e) => setTitle(e.target.value)}
-            className="w-full px-6 py-4 border border-gray-300 rounded-2xl focus:border-[#D4AF37] focus:ring-[#D4AF37] text-[#0F2540] bg-white placeholder-gray-400"
-            placeholder="Enter title" />
+          <input
+            type="text"
+            value={title}
+            onChange={(e) => setTitle(e.target.value)}
+            className="w-full px-6 py-4 border border-gray-300 rounded-2xl focus:border-[#D4AF37] focus:ring-[#D4AF37] text-[#0F2540] bg-white"
+            placeholder="Enter title"
+          />
         </div>
+
         <div>
-          <label className="block text-sm font-medium mb-2 text-[#0F2540]">File</label>
-          <input type="file" onChange={(e) => setFile(e.target.files?.[0] || null)}
-            className="w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white file:mr-4 file:py-3 file:px-6 file:rounded-xl file:border-0 file:bg-[#D4AF37] file:text-[#0F2540] file:font-medium" />
-          <p className="mt-2 text-xs text-gray-400">Type is detected automatically from the file.</p>
+          <label className="block text-sm font-medium mb-2 text-[#0F2540]">Type</label>
+          <select
+            value={type}
+            onChange={(e) => setType(e.target.value)}
+            className="w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white"
+          >
+            <option value="article">Article</option>
+            <option value="image">Image</option>
+            <option value="video">Video</option>
+            <option value="audio">Audio</option>
+          </select>
         </div>
-        <button type="submit" className="w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
-          Upload to Public
-        </button>
-        {status && (
-          <p className={"text-center font-medium text-lg mt-4 " + (status.includes("successful") ? "text-green-600" : "text-red-600")}>
-            {status}
-          </p>
-        )}
-        {preview && (
-          <div className="mt-8 text-center">
-            <p className="text-green-600 font-medium">Preview:</p>
-            <img src={preview} alt="Preview" className="mt-4 rounded-2xl mx-auto max-h-80 border shadow" />
+
+        {type === "article" && (
+          <div>
+            <label className="block text-sm font-medium mb-2 text-[#0F2540]">Article content</label>
+            <ReactQuill theme="snow" value={content} onChange={setContent} className="bg-white" />
           </div>
         )}
+
+        {type !== "article" && (
+          <>
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[#0F2540]">Upload file</label>
+              <input
+                type="file"
+                onChange={(e) => setFile(e.target.files?.[0] || null)}
+                className="w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white"
+              />
+              <p className="mt-2 text-xs text-gray-400">Or paste an embed link below instead of uploading.</p>
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[#0F2540]">Embed URL (YouTube, Vimeo, Spotify, SoundCloud)</label>
+              <input
+                type="text"
+                value={embedUrl}
+                onChange={(e) => setEmbedUrl(e.target.value)}
+                className="w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white"
+                placeholder="https://youtube.com/watch?v=..."
+              />
+            </div>
+
+            <div>
+              <label className="block text-sm font-medium mb-2 text-[#0F2540]">Thumbnail image (optional)</label>
+              <input
+                type="file"
+                accept="image/*"
+                onChange={(e) => setThumbnailFile(e.target.files?.[0] || null)}
+                className="w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white"
+              />
+            </div>
+          </>
+        )}
+
+        <button
+          type="submit"
+          className="w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300"
+        >
+          Publish
+        </button>
+
+        {status && (<p className="text-center font-medium text-lg mt-4 text-[#0F2540]">{status}</p>)}
       </form>
     </div>
   );

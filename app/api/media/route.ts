@@ -18,11 +18,16 @@ export async function GET() {
 export async function POST(request: Request) {
   try {
     const body = await request.json();
-    const { title, type, url } = body;
-    if (!title || !type || !url) {
-      return NextResponse.json({ error: "Missing title, type, or url" }, { status: 400 });
+    const { title, type, url, content, thumbnailUrl, embedUrl } = body;
+
+    if (!title || !type) {
+      return NextResponse.json({ error: "Missing title or type" }, { status: 400 });
     }
-    const media = await prisma.media.create({ data: { title, type, url } });
+
+    const media = await prisma.media.create({
+      data: { title, type, url, content, thumbnailUrl, embedUrl },
+    });
+
     return NextResponse.json({ success: true, media });
   } catch (error) {
     console.error("Media Create Error:", error);

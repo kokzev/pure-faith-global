@@ -37,9 +37,22 @@ model Testimonial {
 }
 
 model Media {
-  id          String   @id @default(cuid())
-  title       String
-  url         String
-  type        String
-  createdAt   DateTime @default(now())
+  id           String   @id @default(cuid())
+  title        String
+  type         String
+  url          String?
+  content      String?
+  thumbnailUrl String?
+  embedUrl     String?
+  createdAt    DateTime @default(now())
+}
+
+model Book {
+  id             String   @id @default(cuid())
+  title          String
+  author         String?
+  description    String?
+  coverImageUrl  String?
+  fileUrl        String?
+  createdAt      DateTime @default(now())
 }
