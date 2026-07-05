@@ -1,9 +1,9 @@
 "use client";
 import { useState, useEffect } from "react";
-import dynamic from "next/dynamic";
-import "react-quill-new/dist/quill.snow.css";
 
-const ReactQuill = dynamic(() => import("react-quill-new"), { ssr: false });
+import ArticleEditor from "@/components/admin/ArticleEditor";
+
+
 
 type MediaItem = {
   id: string;
@@ -146,7 +146,7 @@ export default function MediaUpload() {
         {type === "article" && (
           <div>
             <label className="block text-sm font-medium mb-2 text-[#0F2540]">Article content</label>
-            <ReactQuill theme="snow" value={content} onChange={setContent} className="bg-white" />
+            <ArticleEditor value={content} onChange={setContent} />
           </div>
         )}
 

@@ -130,3 +130,14 @@
     @apply font-sans;
   }
 }
+.ql-container {
+  min-height: 200px;
+  font-size: 16px;
+}
+.ql-editor {
+  min-height: 200px;
+  color: #0F2540;
+}
+.ql-editor.ql-blank::before {
+  color: #9CA3AF;
+}
