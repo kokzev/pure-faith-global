@@ -1,16 +1,12 @@
-import { list } from "@vercel/blob";
 import { NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 
 export async function GET() {
   try {
-    const { blobs } = await list({
-      token: process.env.BLOB_UP_READ_WRITE_TOKEN,
-      prefix: "",
-    });
-    return NextResponse.json({ blobs });
+    const media = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
+    return NextResponse.json({ media });
   } catch (error) {
-    console.error("List Blobs Error:", error);
+    console.error("List Media Error:", error);
     return NextResponse.json({ error: "Failed to fetch media" }, { status: 500 });
   }
 }
