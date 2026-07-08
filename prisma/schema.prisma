@@ -56,3 +56,9 @@ model Book {
   fileUrl        String?
   createdAt      DateTime @default(now())
 }
+
+model SiteSettings {
+  id            String   @id
+  aboutPhotoUrl String?
+  updatedAt     DateTime @updatedAt
+}

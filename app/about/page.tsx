@@ -1,4 +1,11 @@
-﻿export default function AboutPage() {
+import { prisma } from "@/lib/prisma";
+
+export const dynamic = "force-dynamic";
+
+export default async function AboutPage() {
+  const settings = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
+  const aboutPhotoUrl = settings?.aboutPhotoUrl;
+
   return (
     <main className="min-h-screen bg-white">
       <section className="bg-[#0F2540] text-white px-6 py-24 text-center">
@@ -28,9 +35,13 @@
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#1B3A5C]/10">
         <div className="grid md:grid-cols-3 gap-4 items-start">
           <div className="md:col-span-1 flex justify-center">
-            <div className="w-40 h-40 rounded-full bg-[#0F2540]/10 flex items-center justify-center text-[#0F2540]/40 text-sm">
-              [Photo]
-            </div>
+            {aboutPhotoUrl ? (
+              <img src={aboutPhotoUrl} alt="William Zion" className="w-40 h-40 rounded-full object-cover" />
+            ) : (
+              <div className="w-40 h-40 rounded-full bg-[#0F2540]/10 flex items-center justify-center text-[#0F2540]/40 text-sm">
+                [Photo]
+              </div>
+            )}
           </div>
           <div className="md:col-span-2">
             <h2 className="font-serif text-3xl text-[#0F2540] mb-2">Meet William Zion</h2>
