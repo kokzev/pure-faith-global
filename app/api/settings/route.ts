@@ -17,14 +17,11 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
-    const { aboutPhotoUrl } = body;
-
     const settings = await prisma.siteSettings.upsert({
       where: { id: "singleton" },
-      update: { aboutPhotoUrl },
-      create: { id: "singleton", aboutPhotoUrl },
+      update: body,
+      create: { id: "singleton", ...body },
     });
-
     return NextResponse.json({ success: true, settings });
   } catch (error) {
     console.error("Update Settings Error:", error);

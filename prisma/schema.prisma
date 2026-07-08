@@ -58,7 +58,46 @@ model Book {
 }
 
 model SiteSettings {
-  id            String   @id
-  aboutPhotoUrl String?
-  updatedAt     DateTime @updatedAt
+  id                     String   @id
+
+  aboutPhotoUrl          String?
+  aboutHeroText          String?
+  aboutMissionText       String?
+  aboutStoryText         String?
+  aboutBioText           String?
+  aboutValue1Title       String?
+  aboutValue1Text        String?
+  aboutValue2Title       String?
+  aboutValue2Text        String?
+  aboutValue3Title       String?
+  aboutValue3Text        String?
+
+  programsHeroText       String?
+  program1Title          String?
+  program1Description    String?
+  program1ImageUrl       String?
+  program2Title          String?
+  program2Description    String?
+  program2ImageUrl       String?
+  program3Title          String?
+  program3Description    String?
+  program3ImageUrl       String?
+
+  speakingHeroText       String?
+  speakingBioText        String?
+  speakingPhotoUrl       String?
+  speakingTopicsText     String?
+  speakingBookingLink    String?
+
+  academyHeroText        String?
+  academyDescriptionText String?
+  academyPhotoUrl        String?
+  academyEnrollLink      String?
+
+  storeHeroText          String?
+  storeDescriptionText   String?
+  storeLinkType          String?
+  storeExternalUrl       String?
+
+  updatedAt              DateTime @updatedAt
 }
