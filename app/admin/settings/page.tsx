@@ -2,8 +2,18 @@
 import { useState, useEffect } from "react";
 
 type Settings = Record<string, string | null>;
+type PageKey = "about" | "programs" | "speaking" | "academy" | "store";
+
+const PAGES: { key: PageKey; label: string }[] = [
+  { key: "about", label: "About" },
+  { key: "programs", label: "Programs" },
+  { key: "speaking", label: "Speaking" },
+  { key: "academy", label: "Academy" },
+  { key: "store", label: "Store" },
+];
 
 export default function SettingsPage() {
+  const [active, setActive] = useState<PageKey>("about");
   const [settings, setSettings] = useState<Settings>({});
   const [files, setFiles] = useState<Record<string, File | null>>({});
   const [status, setStatus] = useState("");
@@ -40,13 +50,11 @@ export default function SettingsPage() {
         const file = files[key];
         if (file) updated[key] = await uploadFile(file);
       }
-
       const res = await fetch("/api/settings", {
         method: "PATCH",
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(updated),
       });
-
       if (!res.ok) throw new Error("Failed to save");
       setSettings(updated);
       setFiles({});
@@ -81,72 +89,83 @@ export default function SettingsPage() {
     </div>
   );
 
-  const Section = ({ title, children }: { title: string; children: React.ReactNode }) => (
-    <div className="space-y-6 pb-12 mb-12 border-b border-gray-200">
-      <h2 className="text-2xl font-serif text-[#0F2540]">{title}</h2>
-      {children}
-    </div>
-  );
-
   return (
-    <div className="max-w-2xl mx-auto p-12 bg-white rounded-3xl shadow-2xl mt-12 mb-12 border border-gray-100">
-      <h1 className="text-4xl font-serif text-center mb-12 text-[#0F2540]">Site content</h1>
-      <form onSubmit={handleSave}>
+    <div className="max-w-5xl mx-auto mt-12 mb-12 flex gap-8 px-6">
+      <aside className="w-56 shrink-0">
+        <h1 className="text-xl font-serif text-[#0F2540] mb-6">Site content</h1>
+        <nav className="space-y-1">
+          {PAGES.map((p) => (
+            <button key={p.key} type="button" onClick={() => setActive(p.key)}
+              className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${
+                active === p.key ? "bg-[#0F2540] text-white" : "text-[#0F2540] hover:bg-gray-100"
+              }`}>
+              {p.label}
+            </button>
+          ))}
+        </nav>
+      </aside>
 
-        <Section title="About">
-          <ImageInput label="Photo" field="aboutPhotoUrl" />
-          <Text label="Hero text" field="aboutHeroText" />
-          <Text label="Mission text" field="aboutMissionText" />
-          <Text label="Story text" field="aboutStoryText" />
-          <Text label="Bio text" field="aboutBioText" />
-          <Input label="Value 1 title" field="aboutValue1Title" />
-          <Text label="Value 1 text" field="aboutValue1Text" />
-          <Input label="Value 2 title" field="aboutValue2Title" />
-          <Text label="Value 2 text" field="aboutValue2Text" />
-          <Input label="Value 3 title" field="aboutValue3Title" />
-          <Text label="Value 3 text" field="aboutValue3Text" />
-        </Section>
+      <div className="flex-1 bg-white rounded-3xl shadow-2xl border border-gray-100 p-10">
+        <form onSubmit={handleSave} className="space-y-6">
+          <h2 className="text-2xl font-serif text-[#0F2540] mb-2">
+            {PAGES.find((p) => p.key === active)?.label}
+          </h2>
 
-        <Section title="Programs">
-          <Text label="Hero text" field="programsHeroText" />
-          <Input label="Program 1 title" field="program1Title" />
-          <Text label="Program 1 description" field="program1Description" />
-          <ImageInput label="Program 1 image" field="program1ImageUrl" />
-          <Input label="Program 2 title" field="program2Title" />
-          <Text label="Program 2 description" field="program2Description" />
-          <ImageInput label="Program 2 image" field="program2ImageUrl" />
-          <Input label="Program 3 title" field="program3Title" />
-          <Text label="Program 3 description" field="program3Description" />
-          <ImageInput label="Program 3 image" field="program3ImageUrl" />
-        </Section>
+          {active === "about" && (<>
+            <ImageInput label="Photo" field="aboutPhotoUrl" />
+            <Text label="Hero text" field="aboutHeroText" />
+            <Text label="Mission text" field="aboutMissionText" />
+            <Text label="Story text" field="aboutStoryText" />
+            <Text label="Bio text" field="aboutBioText" />
+            <Input label="Value 1 title" field="aboutValue1Title" />
+            <Text label="Value 1 text" field="aboutValue1Text" />
+            <Input label="Value 2 title" field="aboutValue2Title" />
+            <Text label="Value 2 text" field="aboutValue2Text" />
+            <Input label="Value 3 title" field="aboutValue3Title" />
+            <Text label="Value 3 text" field="aboutValue3Text" />
+          </>)}
 
-        <Section title="Speaking">
-          <Text label="Hero text" field="speakingHeroText" />
-          <Text label="Bio text" field="speakingBioText" />
-          <ImageInput label="Photo" field="speakingPhotoUrl" />
-          <Text label="Topics" field="speakingTopicsText" />
-          <Input label="Booking link" field="speakingBookingLink" />
-        </Section>
+          {active === "programs" && (<>
+            <Text label="Hero text" field="programsHeroText" />
+            <Input label="Program 1 title" field="program1Title" />
+            <Text label="Program 1 description" field="program1Description" />
+            <ImageInput label="Program 1 image" field="program1ImageUrl" />
+            <Input label="Program 2 title" field="program2Title" />
+            <Text label="Program 2 description" field="program2Description" />
+            <ImageInput label="Program 2 image" field="program2ImageUrl" />
+            <Input label="Program 3 title" field="program3Title" />
+            <Text label="Program 3 description" field="program3Description" />
+            <ImageInput label="Program 3 image" field="program3ImageUrl" />
+          </>)}
 
-        <Section title="Academy">
-          <Text label="Hero text" field="academyHeroText" />
-          <Text label="Description" field="academyDescriptionText" />
-          <ImageInput label="Photo" field="academyPhotoUrl" />
-          <Input label="Enroll link" field="academyEnrollLink" />
-        </Section>
+          {active === "speaking" && (<>
+            <Text label="Hero text" field="speakingHeroText" />
+            <Text label="Bio text" field="speakingBioText" />
+            <ImageInput label="Photo" field="speakingPhotoUrl" />
+            <Text label="Topics" field="speakingTopicsText" />
+            <Input label="Booking link" field="speakingBookingLink" />
+          </>)}
 
-        <Section title="Store">
-          <Text label="Hero text" field="storeHeroText" />
-          <Text label="Description" field="storeDescriptionText" />
-          <Input label="Link type (give / books / external)" field="storeLinkType" />
-          <Input label="External URL (if applicable)" field="storeExternalUrl" />
-        </Section>
+          {active === "academy" && (<>
+            <Text label="Hero text" field="academyHeroText" />
+            <Text label="Description" field="academyDescriptionText" />
+            <ImageInput label="Photo" field="academyPhotoUrl" />
+            <Input label="Enroll link" field="academyEnrollLink" />
+          </>)}
 
-        <button type="submit" className="w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
-          Save all changes
-        </button>
-        {status && (<p className="text-center font-medium text-lg mt-4 text-[#0F2540]">{status}</p>)}
-      </form>
+          {active === "store" && (<>
+            <Text label="Hero text" field="storeHeroText" />
+            <Text label="Description" field="storeDescriptionText" />
+            <Input label="Link type (give / books / external)" field="storeLinkType" />
+            <Input label="External URL (if applicable)" field="storeExternalUrl" />
+          </>)}
+
+          <button type="submit" className="w-full bg-[#D4AF37] hover:bg-amber-400 py-4 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
+            Save changes
+          </button>
+          {status && (<p className="text-center font-medium text-[#0F2540]">{status}</p>)}
+        </form>
+      </div>
     </div>
   );
 }
