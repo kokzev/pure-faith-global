@@ -102,9 +102,8 @@ export default function SettingsPage() {
         <nav className="space-y-1">
           {PAGES.map((p) => (
             <button key={p.key} type="button" onClick={() => setActive(p.key)}
-              className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${
-                active === p.key ? "bg-[#0F2540] text-white" : "text-[#0F2540] hover:bg-gray-100"
-              }`}>
+              className={`w-full text-left px-4 py-3 rounded-xl font-medium transition-colors ${active === p.key ? "bg-[#0F2540] text-white" : "text-[#0F2540] hover:bg-gray-100"
+                }`}>
               {p.label}
             </button>
           ))}
@@ -120,7 +119,7 @@ export default function SettingsPage() {
           {active === "about" && (<>
             <ImageInput label="Photo" field="aboutPhotoUrl" settings={settings} setFileField={setFileField} />
             <Text label="Hero text" field="aboutHeroText" settings={settings} setField={setField} />
-            <Text label="Mission text" field="aboutMissionText" settings={settings} setField={setField} />
+            <Text label="Belief text" field="aboutBeliefText" settings={settings} setField={setField} />
             <Text label="Story text" field="aboutStoryText" settings={settings} setField={setField} />
             <Text label="Bio text" field="aboutBioText" settings={settings} setField={setField} />
             <Input label="Value 1 title" field="aboutValue1Title" settings={settings} setField={setField} />
