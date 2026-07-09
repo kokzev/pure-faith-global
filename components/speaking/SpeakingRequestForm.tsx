@@ -13,37 +13,47 @@ export default function SpeakingRequestForm() {
     eventDate: "",
     message: "",
   });
+  const [copied, setCopied] = useState(false);
 
   const setField = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const handleSubmit = (e: React.FormEvent) => {
-    e.preventDefault();
+  const buildBody = () => [
+    `Name: ${form.name}`,
+    `Email: ${form.email}`,
+    `Phone: ${form.phone}`,
+    `Address: ${form.address}`,
+    `Organization: ${form.organization}`,
+    `Website: ${form.website}`,
+    `Congregation: ${form.congregation}`,
+    `Potential date: ${form.eventDate}`,
+    "",
+    "Message:",
+    form.message,
+  ].join("\n");
 
-    const subject = `Speaking Request from ${form.name || "Website Visitor"}`;
-    const body = [
-      `Name: ${form.name}`,
-      `Email: ${form.email}`,
-      `Phone: ${form.phone}`,
-      `Address: ${form.address}`,
-      `Organization: ${form.organization}`,
-      `Website: ${form.website}`,
-      `Congregation: ${form.congregation}`,
-      `Potential date: ${form.eventDate}`,
-      "",
-      "Message:",
-      form.message,
-    ].join("\n");
+  const subject = `Speaking Request from ${form.name || "Website Visitor"}`;
+  const body = buildBody();
+  const mailtoLink = `mailto:wllmzion@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
 
-    const mailtoLink = `mailto:wllmzion@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-    window.location.href = mailtoLink;
+  const handleValidate = (e: React.MouseEvent<HTMLAnchorElement>) => {
+    if (!form.name || !form.email) {
+      e.preventDefault();
+      alert("Please fill in at least your name and email before sending.");
+    }
+  };
+
+  const handleCopy = async () => {
+    await navigator.clipboard.writeText(`To: wllmzion@gmail.com\nSubject: ${subject}\n\n${body}`);
+    setCopied(true);
+    setTimeout(() => setCopied(false), 3000);
   };
 
   const inputClass = "w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white focus:border-[#D4AF37] focus:ring-[#D4AF37]";
 
   return (
-    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
+    <div className="space-y-6 max-w-2xl mx-auto">
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium mb-2 text-[#0F2540]">Name</label>
@@ -93,9 +103,17 @@ export default function SpeakingRequestForm() {
         <textarea rows={5} value={form.message} onChange={(e) => setField("message", e.target.value)} className={inputClass} />
       </div>
 
-      <button type="submit" className="w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
+      <a href={mailtoLink} onClick={handleValidate}
+        className="block text-center w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
         Send request
-      </button>
-    </form>
+      </a>
+
+      <p className="text-center text-sm text-gray-500">
+        Nothing happen? Your device may not have an email app set up.{" "}
+        <button type="button" onClick={handleCopy} className="underline text-[#0F2540] font-medium">
+          {copied ? "Copied!" : "Copy details instead"}
+        </button>
+      </p>
+    </div>
   );
 }
