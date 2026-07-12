@@ -151,18 +151,18 @@ export default function Home() {
           </nav>
 
           <Link
+            href="/give"
+            className="bg-[#0F2540] text-white px-8 py-3.5 rounded-2xl font-bold border-2 border-[#D4AF37] hover:bg-[#1B3A5C] transition-colors duration-300"
+          >
+            Donate
+          </Link>
+
+          <Link
             href="/speaking"
             className="relative overflow-hidden bg-[#D4AF37] text-[#0F2540] px-8 py-3.5 rounded-2xl font-bold shadow transition-transform duration-300 hover:scale-105"
           >
             <span className="relative z-10">Book William Zion</span>
             <span className="cta-shimmer absolute inset-0 z-0" />
-          </Link>
-
-          <Link
-            href="/give"
-            className="bg-[#0F2540] text-white px-8 py-3.5 rounded-2xl font-bold border-2 border-[#D4AF37] hover:bg-[#1B3A5C] transition-colors duration-300"
-          >
-            Donate
           </Link>
         </div>
       </header>
@@ -301,6 +301,7 @@ export default function Home() {
     </div>
   );
 }
+
 
 
 
