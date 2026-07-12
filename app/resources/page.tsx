@@ -34,6 +34,9 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
     orderBy: { createdAt: "desc" },
   });
 
+  const articles = media.filter((m) => m.type === "article");
+  const others = media.filter((m) => m.type !== "article");
+
   return (
     <main className="min-h-screen bg-white px-6 py-20">
       <div className="mx-auto max-w-3xl text-center mb-10">
@@ -41,7 +44,7 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
         <p className="mt-4 text-[#1B3A5C]/70">Teachings, articles, and media from Pure Faith Global.</p>
       </div>
 
-      <div className="flex justify-center gap-3 mb-12 flex-wrap">
+      <div className="flex justify-center gap-3 mb-16 flex-wrap">
         {FILTERS.map((f) => {
           const href = f.value ? `/resources?type=${f.value}` : "/resources";
           const active = (type || undefined) === f.value;
@@ -56,17 +59,34 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
         })}
       </div>
 
-      {media.length === 0 ? (
-        <p className="text-center text-[#1B3A5C]/60">No resources found.</p>
-      ) : (
+      {media.length === 0 && (<p className="text-center text-[#1B3A5C]/60">No resources found.</p>)}
+
+      {articles.length > 0 && (
+        <div className="max-w-2xl mx-auto space-y-20 mb-20">
+          {articles.map((item) => (
+            <article key={item.id} className="border-b border-[#1B3A5C]/10 pb-16 last:border-b-0">
+              <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">Article</span>
+              <h2 className="mt-3 font-serif text-3xl text-[#0F2540] leading-snug">{item.title}</h2>
+              {item.content && (
+                <div
+                  className="article-content mt-6 text-[17px] leading-[1.8] text-[#1B3A5C]"
+                  dangerouslySetInnerHTML={{ __html: item.content }}
+                />
+              )}
+            </article>
+          ))}
+        </div>
+      )}
+
+      {others.length > 0 && (
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
-          {media.map((item) => {
+          {others.map((item) => {
             const embedSrc = item.embedUrl ? getEmbedUrl(item.embedUrl) : null;
             const cover = item.thumbnailUrl || item.url;
 
             return (
               <article key={item.id} className="pf-card rounded-xl border border-[#1B3A5C]/10 overflow-hidden">
-                {item.type !== "article" && cover && item.type !== "video" && (
+                {cover && item.type !== "video" && (
                   <div className="pf-thumb relative h-40 bg-[#0F2540] overflow-hidden">
                     <img src={cover} alt={item.title} className="pf-thumb-img w-full h-full object-cover" />
                   </div>
@@ -75,13 +95,6 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
                 <div className="p-6">
                   <span className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold">{item.type}</span>
                   <h2 className="mt-2 font-serif text-xl text-[#0F2540]">{item.title}</h2>
-
-                  {item.type === "article" && item.content && (
-                    <div
-                      className="mt-4 prose prose-sm max-w-none text-[#1B3A5C]"
-                      dangerouslySetInnerHTML={{ __html: item.content }}
-                    />
-                  )}
 
                   {item.type === "video" && embedSrc && (
                     <div className="mt-4 aspect-video">
@@ -114,6 +127,13 @@ export default async function ResourcesPage({ searchParams }: { searchParams: Pr
         .pf-card:hover { border-color: #D4AF37; transform: translateY(-4px); }
         .pf-thumb-img { transition: transform 0.5s ease; }
         .pf-card:hover .pf-thumb-img { transform: scale(1.08); }
+        .article-content p { margin-bottom: 1.25em; }
+        .article-content h1, .article-content h2, .article-content h3 { font-weight: 700; color: #0F2540; margin-top: 1.5em; margin-bottom: 0.5em; }
+        .article-content ul, .article-content ol { margin: 1em 0; padding-left: 1.5em; }
+        .article-content li { margin-bottom: 0.5em; }
+        .article-content a { color: #D4AF37; text-decoration: underline; }
+        .article-content strong { font-weight: 700; color: #0F2540; }
+        .article-content blockquote { border-left: 3px solid #D4AF37; padding-left: 1em; font-style: italic; color: #1B3A5C99; margin: 1.5em 0; }
       `}</style>
     </main>
   );
