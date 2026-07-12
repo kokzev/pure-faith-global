@@ -58,9 +58,9 @@ export default function Home() {
   ];
 
   const programs = [
-    { title: 'Global Outreach & Missions', icon: '🌍' },
-    { title: 'Speaking & Crusades', icon: '🔥' },
-    { title: 'Discipleship & Mentorship', icon: '📖' },
+    { title: 'Global Outreach & Missions', icon: 'Ã°Å¸Å’Â' },
+    { title: 'Speaking & Crusades', icon: 'Ã°Å¸â€Â¥' },
+    { title: 'Discipleship & Mentorship', icon: 'Ã°Å¸â€œâ€“' },
   ];
 
   return (
@@ -106,7 +106,7 @@ export default function Home() {
       <div className="bg-gradient-to-r from-[#0F2540] via-[#1B3A5C] to-[#0F2540] py-3 text-white text-sm border-b border-[#D4AF37]/20">
         <div className="max-w-7xl mx-auto px-8 flex justify-between items-center">
           <div className="flex items-center gap-3 font-medium">
-            <span className="text-[#D4AF37] text-xl">✝️</span>
+            <span className="text-[#D4AF37] text-xl">Ã¢Å“ÂÃ¯Â¸Â</span>
             Proclaiming the Gospel to Every Nation with Pure, Uncompromising Faith
           </div>
           <div className="text-xs text-[#D4AF37] tracking-[3px] font-semibold">EST.JANUARY 2020</div>
@@ -137,17 +137,30 @@ export default function Home() {
             </div>
           </div>
 
-          <nav className="hidden md:flex gap-9 text-[#1B3A5C] font-semibold">
-            {['About', 'Programs', 'Speaking', 'Academy', 'Resources', 'Store'].map((item) => (
-              <Link
-                key={item}
-                href={`/${item.toLowerCase()}`}
-                className="relative group py-1"
-              >
-                {item}
+                    <nav className="hidden md:flex gap-9 text-[#1B3A5C] font-semibold">
+            {[["About", "/about"], ["Programs", "/programs"], ["Speaking", "/speaking"], ["Academy", "/academy"]].map(([label, href]) => (
+              <Link key={label} href={href} className="relative group py-1">
+                {label}
                 <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
               </Link>
             ))}
+
+            <div className="relative group py-1">
+              <span className="cursor-pointer">Resources</span>
+              <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
+              <div className="absolute left-0 top-full pt-3 hidden group-hover:block z-50">
+                <div className="bg-white border border-[#1B3A5C]/10 rounded-xl shadow-lg py-2 w-40">
+                  <Link href="/resources?type=article" className="block px-4 py-2 text-sm hover:bg-[#F8F5F0]">Articles</Link>
+                  <Link href="/resources?type=video" className="block px-4 py-2 text-sm hover:bg-[#F8F5F0]">Videos</Link>
+                  <Link href="/resources?type=audio" className="block px-4 py-2 text-sm hover:bg-[#F8F5F0]">Audios</Link>
+                </div>
+              </div>
+            </div>
+
+            <Link href="/store" className="relative group py-1">
+              Store
+              <span className="absolute left-0 -bottom-1 h-[2px] w-0 bg-[#D4AF37] transition-all duration-300 group-hover:w-full" />
+            </Link>
           </nav>
 
           <Link
@@ -167,7 +180,7 @@ export default function Home() {
         </div>
       </header>
 
-      {/* Hero — living light */}
+      {/* Hero Ã¢â‚¬â€ living light */}
       <section className="relative min-h-[100vh] flex items-center bg-[#0F2540] text-white overflow-hidden">
         <div className="absolute inset-0 bg-[radial-gradient(#D4AF37_1.5px,transparent_1px)] bg-[length:90px_90px] opacity-20" />
 
@@ -186,7 +199,7 @@ export default function Home() {
 
         <div className="max-w-6xl mx-auto px-8 text-center relative z-10">
           <div className="mb-8 inline-flex items-center gap-4 px-8 py-3 border border-[#D4AF37]/30 rounded-full text-sm tracking-[4px] text-[#D4AF37] font-semibold">
-            ✝️  MINISTERING BY THE HOLY SPIRIT
+            Ã¢Å“ÂÃ¯Â¸Â  MINISTERING BY THE HOLY SPIRIT
           </div>
 
           <h1 className="font-serif font-black text-[110px] md:text-[150px] leading-[0.9] tracking-[-6px] mb-8">
@@ -237,7 +250,7 @@ export default function Home() {
                 style={{ transitionDelay: booksVisible ? `${i * 80}ms` : '0ms' }}
               >
                 <div className="h-80 bg-gradient-to-br from-[#0F2540] to-[#1B3A5C] flex items-center justify-center text-8xl relative overflow-hidden">
-                  <span className="transition-transform duration-500 group-hover:scale-110">📖</span>
+                  <span className="transition-transform duration-500 group-hover:scale-110">Ã°Å¸â€œâ€“</span>
                   {book.badge && (
                     <div className="absolute top-6 left-6 bg-[#D4AF37] text-[#0F2540] text-xs px-4 py-1 rounded-full font-black">
                       {book.badge}
@@ -306,5 +319,7 @@ export default function Home() {
 
 
 
+
+
 
 

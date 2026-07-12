@@ -20,18 +20,44 @@ function getEmbedUrl(url: string): string | null {
   return null;
 }
 
-export default async function ResourcesPage() {
-  const media = await prisma.media.findMany({ orderBy: { createdAt: "desc" } });
+const FILTERS = [
+  { label: "All", value: undefined },
+  { label: "Articles", value: "article" },
+  { label: "Videos", value: "video" },
+  { label: "Audios", value: "audio" },
+];
+
+export default async function ResourcesPage({ searchParams }: { searchParams: Promise<{ type?: string }> }) {
+  const { type } = await searchParams;
+  const media = await prisma.media.findMany({
+    where: type ? { type } : undefined,
+    orderBy: { createdAt: "desc" },
+  });
 
   return (
     <main className="min-h-screen bg-white px-6 py-20">
-      <div className="mx-auto max-w-3xl text-center mb-16">
+      <div className="mx-auto max-w-3xl text-center mb-10">
         <h1 className="font-serif text-4xl text-[#0F2540]">Resources</h1>
         <p className="mt-4 text-[#1B3A5C]/70">Teachings, articles, and media from Pure Faith Global.</p>
       </div>
 
+      <div className="flex justify-center gap-3 mb-12 flex-wrap">
+        {FILTERS.map((f) => {
+          const href = f.value ? `/resources?type=${f.value}` : "/resources";
+          const active = (type || undefined) === f.value;
+          return (
+            <a key={f.label} href={href}
+              className={`px-5 py-2 rounded-full text-sm font-semibold border transition-colors ${
+                active ? "bg-[#0F2540] text-white border-[#0F2540]" : "text-[#0F2540] border-[#1B3A5C]/20 hover:border-[#D4AF37]"
+              }`}>
+              {f.label}
+            </a>
+          );
+        })}
+      </div>
+
       {media.length === 0 ? (
-        <p className="text-center text-[#1B3A5C]/60">No resources have been uploaded yet.</p>
+        <p className="text-center text-[#1B3A5C]/60">No resources found.</p>
       ) : (
         <div className="mx-auto grid max-w-6xl grid-cols-1 gap-8 sm:grid-cols-2 lg:grid-cols-3">
           {media.map((item) => {
