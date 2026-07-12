@@ -17,10 +17,11 @@ export async function GET() {
 export async function PATCH(request: Request) {
   try {
     const body = await request.json();
+    const { id, updatedAt, ...data } = body;
     const settings = await prisma.siteSettings.upsert({
       where: { id: "singleton" },
-      update: body,
-      create: { id: "singleton", ...body },
+      update: data,
+      create: { id: "singleton", ...data },
     });
     return NextResponse.json({ success: true, settings });
   } catch (error) {
