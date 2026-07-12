@@ -1,7 +1,6 @@
 'use client';
 import Link from 'next/link';
 import { useEffect, useRef, useState } from 'react';
-import ContactSection from '@/components/home/ContactSection';
 
 function useReveal<T extends HTMLElement>() {
   const ref = useRef<T>(null);
@@ -195,7 +194,7 @@ export default function Home() {
           </p>
 
           <div className="flex flex-col sm:flex-row gap-6 justify-center items-center">
-            <a href="#contact" className="group bg-white text-[#0F2540] px-14 py-6 rounded-3xl text-xl font-bold hover:scale-105 transition-all duration-500 shadow-2xl">Contact Us</a>
+            <a href="/contact" className="group bg-white text-[#0F2540] px-14 py-6 rounded-3xl text-xl font-bold hover:scale-105 transition-all duration-500 shadow-2xl">Contact Us</a>
             <Link
               href="/academy"
               className="border-2 border-white/60 hover:border-white text-white px-14 py-6 rounded-3xl text-xl font-bold hover:bg-white/10 transition-all duration-500"
@@ -289,15 +288,13 @@ export default function Home() {
             {/* Fetched media will appear here */}
           </div>
         </div>
-      </section>
-
-      <ContactSection />
-      <footer className="bg-[#0F2540] py-20 text-white/70 text-center text-sm tracking-wide">
+      </section>`n      <footer className="bg-[#0F2540] py-20 text-white/70 text-center text-sm tracking-wide">
         Copyright Pure Faith Global - William Zion - All Glory to God
       </footer>
     </div>
   );
 }
+
 
 
 
