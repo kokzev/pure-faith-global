@@ -13,47 +13,55 @@ export default function SpeakingRequestForm() {
     eventDate: "",
     message: "",
   });
-  const [copied, setCopied] = useState(false);
+  const [status, setStatus] = useState("");
+  const [submitting, setSubmitting] = useState(false);
 
   const setField = (key: string, value: string) => {
     setForm((prev) => ({ ...prev, [key]: value }));
   };
 
-  const buildBody = () => [
-    `Name: ${form.name}`,
-    `Email: ${form.email}`,
-    `Phone: ${form.phone}`,
-    `Address: ${form.address}`,
-    `Organization: ${form.organization}`,
-    `Website: ${form.website}`,
-    `Congregation: ${form.congregation}`,
-    `Potential date: ${form.eventDate}`,
-    "",
-    "Message:",
-    form.message,
-  ].join("\n");
-
-  const subject = `Speaking Request from ${form.name || "Website Visitor"}`;
-  const body = buildBody();
-  const mailtoLink = `mailto:wllmzion@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
-
-  const handleValidate = (e: React.MouseEvent<HTMLAnchorElement>) => {
+  const handleSubmit = async (e: React.FormEvent) => {
+    e.preventDefault();
     if (!form.name || !form.email) {
-      e.preventDefault();
-      alert("Please fill in at least your name and email before sending.");
+      setStatus("Please fill in at least your name and email.");
+      return;
     }
-  };
-
-  const handleCopy = async () => {
-    await navigator.clipboard.writeText(`To: wllmzion@gmail.com\nSubject: ${subject}\n\n${body}`);
-    setCopied(true);
-    setTimeout(() => setCopied(false), 3000);
+    setSubmitting(true);
+    setStatus("Sending...");
+    try {
+      const res = await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "97412ecf-2362-489b-83cc-849ad95b7508",
+          subject: `Speaking Request from ${form.name}`,
+          from_name: "Pure Faith Global Website",
+          name: form.name,
+          email: form.email,
+          phone: form.phone,
+          address: form.address,
+          organization: form.organization,
+          website: form.website,
+          congregation: form.congregation,
+          "Potential date": form.eventDate,
+          message: form.message,
+        }),
+      });
+      const data = await res.json();
+      if (!data.success) throw new Error(data.message || "Failed to send");
+      setStatus("Request sent! We will be in touch soon.");
+      setForm({ name: "", email: "", phone: "", address: "", organization: "", website: "", congregation: "", eventDate: "", message: "" });
+    } catch (err) {
+      setStatus("Something went wrong. Please try again.");
+    } finally {
+      setSubmitting(false);
+    }
   };
 
   const inputClass = "w-full px-6 py-4 border border-gray-300 rounded-2xl text-[#0F2540] bg-white focus:border-[#D4AF37] focus:ring-[#D4AF37]";
 
   return (
-    <div className="space-y-6 max-w-2xl mx-auto">
+    <form onSubmit={handleSubmit} className="space-y-6 max-w-2xl mx-auto">
       <div className="grid md:grid-cols-2 gap-6">
         <div>
           <label className="block text-sm font-medium mb-2 text-[#0F2540]">Name</label>
@@ -103,17 +111,12 @@ export default function SpeakingRequestForm() {
         <textarea rows={5} value={form.message} onChange={(e) => setField("message", e.target.value)} className={inputClass} />
       </div>
 
-      <a href={mailtoLink} onClick={handleValidate}
-        className="block text-center w-full bg-[#D4AF37] hover:bg-amber-400 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
-        Send request
-      </a>
+      <button type="submit" disabled={submitting}
+        className="block text-center w-full bg-[#D4AF37] hover:bg-amber-400 disabled:opacity-60 py-5 rounded-2xl text-[#0F2540] font-bold text-lg transition-all duration-300">
+        {submitting ? "Sending..." : "Send request"}
+      </button>
 
-      <p className="text-center text-sm text-gray-500">
-        Nothing happen? Your device may not have an email app set up.{" "}
-        <button type="button" onClick={handleCopy} className="underline text-[#0F2540] font-medium">
-          {copied ? "Copied!" : "Copy details instead"}
-        </button>
-      </p>
-    </div>
+      {status && (<p className="text-center text-sm text-[#0F2540] font-medium">{status}</p>)}
+    </form>
   );
 }
