@@ -1,3 +1,5 @@
+import PaystackDonate from "@/components/give/PaystackDonate";
+
 export default function GivePage() {
   return (
     <main className="min-h-screen bg-white">
@@ -9,7 +11,7 @@ export default function GivePage() {
         </p>
       </section>
 
-      <section className="max-w-lg mx-auto px-6 py-20">
+      <section className="max-w-4xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-8 items-start">
         <div className="border border-[#1B3A5C]/10 rounded-3xl p-10 text-center shadow-sm">
           <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold mb-4">Mobile Money</p>
           <p className="font-serif text-3xl text-[#0F2540] mb-2">AirtelTigo Money</p>
@@ -17,9 +19,7 @@ export default function GivePage() {
           <p className="text-[#1B3A5C]/70">Account name: William Zion</p>
         </div>
 
-        <p className="mt-10 text-center text-[#1B3A5C]/60 text-sm">
-          More giving options will be added soon.
-        </p>
+        <PaystackDonate />
       </section>
     </main>
   );
