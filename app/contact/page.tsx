@@ -1,5 +1,10 @@
 import ContactSection from "@/components/home/ContactSection";
 
+export const metadata = {
+  title: "Contact Us",
+  description: "Get in touch with Pure Faith Global in Accra, Ghana. Reach out with questions, prayer needs, or ministry inquiries.",
+};
+
 export default function ContactPage() {
   return (
     <main className="min-h-screen bg-white">
@@ -14,3 +19,4 @@ export default function ContactPage() {
     </main>
   );
 }
+

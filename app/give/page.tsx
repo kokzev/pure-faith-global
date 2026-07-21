@@ -1,5 +1,10 @@
 import PaystackDonate from "@/components/give/PaystackDonate";
 
+export const metadata = {
+  title: "Give to Pure Faith Global",
+  description: "Support the work of Pure Faith Global through Mobile Money or Visa/Mastercard. Your generosity helps carry the Gospel to the nations.",
+};
+
 export default function GivePage() {
   return (
     <main className="min-h-screen bg-white">
@@ -24,3 +29,4 @@ export default function GivePage() {
     </main>
   );
 }
+

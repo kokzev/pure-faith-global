@@ -2,6 +2,11 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "Sermons, Articles & Teaching Resources",
+  description: "Browse free articles, videos, and audio sermons from William Zion and Pure Faith Global, covering faith, discipleship, and Christian living.",
+};
+
 function getEmbedUrl(url: string): string | null {
   const yt = url.match(/(?:youtube\.com\/watch\?v=|youtu\.be\/)([a-zA-Z0-9_-]+)/);
   if (yt) return `https://www.youtube.com/embed/${yt[1]}`;

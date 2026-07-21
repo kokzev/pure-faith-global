@@ -2,9 +2,13 @@ import { prisma } from "@/lib/prisma";
 
 export const dynamic = "force-dynamic";
 
+export const metadata = {
+  title: "About William Zion & Pure Faith Global",
+  description: "Meet William Zion and learn the story, mission, and values behind Pure Faith Global ministry, founded in 2020 to bring the Gospel to the nations.",
+};
+
 export default async function AboutPage() {
   const s = await prisma.siteSettings.findUnique({ where: { id: "singleton" } });
-
   return (
     <main className="min-h-screen bg-white">
       <section className="bg-[#0F2540] text-white px-6 py-24 text-center">
@@ -14,21 +18,18 @@ export default async function AboutPage() {
           {s?.aboutHeroText || "[Placeholder: One or two sentences summarizing the heart and mission of the ministry.]"}
         </p>
       </section>
-
       <section className="max-w-4xl mx-auto px-6 py-20">
         <h2 className="font-serif text-3xl text-[#0F2540] mb-4">Our Mission</h2>
         <p className="text-[#1B3A5C]/80 leading-relaxed whitespace-pre-line">
           {s?.aboutMissionText || "[Placeholder: Describe the mission of Pure Faith Global.]"}
         </p>
       </section>
-
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#1B3A5C]/10">
         <h2 className="font-serif text-3xl text-[#0F2540] mb-4">Our Story</h2>
         <p className="text-[#1B3A5C]/80 leading-relaxed whitespace-pre-line">
           {s?.aboutStoryText || "[Placeholder: Share how the ministry began.]"}
         </p>
       </section>
-
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#1B3A5C]/10">
         <div className="grid md:grid-cols-3 gap-4 items-start">
           <div className="md:col-span-1 flex justify-center">
@@ -48,7 +49,6 @@ export default async function AboutPage() {
           </div>
         </div>
       </section>
-
       <section className="max-w-4xl mx-auto px-6 py-20 border-t border-[#1B3A5C]/10">
         <h2 className="font-serif text-3xl text-[#0F2540] mb-8 text-center">Our Values</h2>
         <div className="grid md:grid-cols-3 gap-8">
