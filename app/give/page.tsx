@@ -1,6 +1,6 @@
 export const metadata = {
   title: "Give to Pure Faith Global",
-  description: "Support the work of Pure Faith Global through Mobile Money. Your generosity helps carry the Gospel to the nations.",
+  description: "Support the work of Pure Faith Global. Your generosity helps carry the Gospel to the nations.",
 };
 
 export default function GivePage() {
@@ -13,16 +13,9 @@ export default function GivePage() {
           Your generosity helps carry the Gospel to the nations. Thank you for sowing into this work.
         </p>
       </section>
-      <section className="max-w-lg mx-auto px-6 py-20">
-        <div className="border border-[#1B3A5C]/10 rounded-3xl p-10 text-center shadow-sm">
-          <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold mb-4">Mobile Money</p>
-          <p className="font-serif text-3xl text-[#0F2540] mb-2">AirtelTigo Money</p>
-          <p className="text-2xl text-[#0F2540] font-bold tracking-wide mb-2">0264 523 625</p>
-          <p className="text-[#1B3A5C]/70">Account name: William Zion</p>
-        </div>
-
-        <p className="mt-10 text-center text-[#1B3A5C]/60 text-sm">
-          More giving options will be added soon.
+      <section className="max-w-lg mx-auto px-6 py-20 text-center">
+        <p className="text-[#1B3A5C]/60">
+          Giving options are being updated. Please check back soon.
         </p>
       </section>
     </main>
