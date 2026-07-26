@@ -44,6 +44,7 @@ export async function POST(req: Request) {
           subject: `New Prayer Request from ${name || "Anonymous"}`,
           from_name: "Pure Faith Global Website",
           name: name || "Anonymous",
+          email: "noreply@purefaithglobal.org",
           message: request,
         }),
       });
