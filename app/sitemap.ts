@@ -14,6 +14,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     "/store",
     "/give",
     "/contact",
+    "/prayer-request",
   ];
 
   return routes.map((route) => ({

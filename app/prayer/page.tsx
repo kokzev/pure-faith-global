@@ -1,8 +1,5 @@
-﻿export default function Page() {
-  return (
-    <div style={{ padding: 40 }}>
-      <h1>prayer</h1>
-      <p>Coming soon</p>
-    </div>
-  );
+import { redirect } from "next/navigation";
+
+export default function PrayerPage() {
+  redirect("/prayer-request");
 }

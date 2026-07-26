@@ -10,5 +10,5 @@ export function proxy(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/admin/media"],
+  matcher: ["/admin/media", "/admin/books", "/admin/settings", "/admin/prayer-requests"],
 };

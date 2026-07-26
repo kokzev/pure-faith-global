@@ -1,4 +1,9 @@
-﻿import PrayerRequestForm from "@/components/PrayerRequestForm";
+import PrayerRequestForm from "@/components/PrayerRequestForm";
+
+export const metadata = {
+  title: "Prayer Request",
+  description: "Share your prayer request with Pure Faith Global. We believe in the power of prayer and our team will lift up what is on your heart.",
+};
 
 export default function PrayerRequestPage() {
   return (
