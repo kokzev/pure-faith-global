@@ -29,6 +29,24 @@ export default function PrayerRequestForm() {
         return;
       }
 
+      // Notify by email, client-side, best-effort
+      try {
+        await fetch("https://api.web3forms.com/submit", {
+          method: "POST",
+          headers: { "Content-Type": "application/json", Accept: "application/json" },
+          body: JSON.stringify({
+            access_key: "97412ecf-2362-489b-83cc-849ad95b7508",
+            subject: `New Prayer Request from ${name || "Anonymous"}`,
+            from_name: "Pure Faith Global Website",
+            name: name || "Anonymous",
+            email: "wllmzion@gmail.com",
+            message: request,
+          }),
+        });
+      } catch {
+        // Notification failure should not block the success state
+      }
+
       setStatus("success");
       setName("");
       setRequest("");
@@ -106,4 +124,3 @@ export default function PrayerRequestForm() {
     </form>
   );
 }
-
