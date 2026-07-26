@@ -1,4 +1,4 @@
-﻿import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";
 import { z } from "zod";
 
 const prayerRequestSchema = z.object({
@@ -34,6 +34,23 @@ export async function POST(req: Request) {
       },
     });
 
+    // Notify by email, best-effort - does not block or fail the request if it errors
+    try {
+      await fetch("https://api.web3forms.com/submit", {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify({
+          access_key: "97412ecf-2362-489b-83cc-849ad95b7508",
+          subject: `New Prayer Request from ${name || "Anonymous"}`,
+          from_name: "Pure Faith Global Website",
+          name: name || "Anonymous",
+          message: request,
+        }),
+      });
+    } catch (notifyError) {
+      console.error("Prayer Request Notification Error:", notifyError);
+    }
+
     return Response.json({ success: true });
   } catch (error) {
     console.error("PRAYER REQUEST POST ERROR:", error);
@@ -44,7 +61,7 @@ export async function POST(req: Request) {
   }
 }
 
-// LIST prayer requests (admin use — lock this down with auth before production)
+// LIST prayer requests (admin use - lock this down with auth before production)
 export async function GET() {
   try {
     const requests = await prisma.prayerRequest.findMany({
