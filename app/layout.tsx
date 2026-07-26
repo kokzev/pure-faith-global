@@ -21,6 +21,26 @@ export const metadata: Metadata = {
   },
 };
 
+const jsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Pure Faith Global",
+  alternateName: "Pure Faith Global Ministry",
+  url: "https://pure-faith-global-one.vercel.app",
+  logo: "https://pure-faith-global-one.vercel.app/icon.svg",
+  founder: {
+    "@type": "Person",
+    name: "William Zion",
+  },
+  foundingDate: "2020-01",
+  address: {
+    "@type": "PostalAddress",
+    addressLocality: "Accra",
+    addressCountry: "GH",
+  },
+  sameAs: [],
+};
+
 export default function RootLayout({
   children,
 }: {
@@ -28,6 +48,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
+      <head>
+        <script
+          type="application/ld+json"
+          dangerouslySetInnerHTML={{ __html: JSON.stringify(jsonLd) }}
+        />
+      </head>
       <body className="bg-black text-white">
         {children}
       </body>
