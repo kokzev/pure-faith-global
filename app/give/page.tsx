@@ -1,8 +1,6 @@
-import PaystackDonate from "@/components/give/PaystackDonate";
-
 export const metadata = {
   title: "Give to Pure Faith Global",
-  description: "Support the work of Pure Faith Global through Mobile Money or Visa/Mastercard. Your generosity helps carry the Gospel to the nations.",
+  description: "Support the work of Pure Faith Global through Mobile Money. Your generosity helps carry the Gospel to the nations.",
 };
 
 export default function GivePage() {
@@ -15,8 +13,7 @@ export default function GivePage() {
           Your generosity helps carry the Gospel to the nations. Thank you for sowing into this work.
         </p>
       </section>
-
-      <section className="max-w-4xl mx-auto px-6 py-20 grid md:grid-cols-2 gap-8 items-start">
+      <section className="max-w-lg mx-auto px-6 py-20">
         <div className="border border-[#1B3A5C]/10 rounded-3xl p-10 text-center shadow-sm">
           <p className="text-xs uppercase tracking-widest text-[#D4AF37] font-bold mb-4">Mobile Money</p>
           <p className="font-serif text-3xl text-[#0F2540] mb-2">AirtelTigo Money</p>
@@ -24,9 +21,10 @@ export default function GivePage() {
           <p className="text-[#1B3A5C]/70">Account name: William Zion</p>
         </div>
 
-        <PaystackDonate />
+        <p className="mt-10 text-center text-[#1B3A5C]/60 text-sm">
+          More giving options will be added soon.
+        </p>
       </section>
     </main>
   );
 }
-
