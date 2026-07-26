@@ -1,4 +1,4 @@
-﻿"use client";
+"use client";
 
 import { useState } from "react";
 
@@ -74,7 +74,7 @@ export default function PrayerRequestForm() {
           type="text"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="w-full rounded-md border border-[#1B3A5C]/20 px-4 py-3 focus:border-[#D4AF37] focus:outline-none"
+          className="w-full rounded-md border border-[#1B3A5C]/20 px-4 py-3 text-[#0F2540] focus:border-[#D4AF37] focus:outline-none"
         />
       </div>
 
@@ -88,7 +88,7 @@ export default function PrayerRequestForm() {
           rows={6}
           value={request}
           onChange={(e) => setRequest(e.target.value)}
-          className="w-full rounded-md border border-[#1B3A5C]/20 px-4 py-3 focus:border-[#D4AF37] focus:outline-none"
+          className="w-full rounded-md border border-[#1B3A5C]/20 px-4 py-3 text-[#0F2540] focus:border-[#D4AF37] focus:outline-none"
         />
       </div>
 
@@ -106,3 +106,4 @@ export default function PrayerRequestForm() {
     </form>
   );
 }
+
