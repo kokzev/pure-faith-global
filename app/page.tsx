@@ -41,6 +41,7 @@ const NAV_LINKS: [string, string][] = [
   ['Programs', '/programs'],
   ['Speaking', '/speaking'],
   ['Academy', '/academy'],
+  ['Prayer', '/prayer-request'],
 ];
 
 export default function Home() {
